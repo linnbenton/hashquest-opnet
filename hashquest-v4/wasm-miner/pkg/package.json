@@ -1,0 +1,17 @@
+{
+  "name": "miner",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "miner_bg.wasm",
+    "miner.js",
+    "miner_bg.js",
+    "miner.d.ts"
+  ],
+  "main": "miner.js",
+  "types": "miner.d.ts",
+  "sideEffects": [
+    "./miner.js",
+    "./snippets/*"
+  ]
+}

@@ -1,0 +1,34 @@
+# Semua file text otomatis dinormalisasi ke LF saat commit
+* text=auto eol=lf
+
+# Paksa LF untuk file-file source code utama (opsional tapi bagus)
+*.js    text eol=lf
+*.jsx   text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.json  text eol=lf
+*.css   text eol=lf
+*.scss  text eol=lf
+*.md    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.toml  text eol=lf
+
+# File binary jangan disentuh line ending-nya
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.wasm  binary
+*.pdf   binary
+*.zip   binary
+
+# Installer & binary files
+*.exe
+*.msi
+node_modules/
+.next/
+out/
+.DS_Store
+Thumbs.db

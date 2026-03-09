@@ -1,0 +1,5 @@
+# di .gitignore root
+hasquest-v4/wasm-miner/target/
+hasquest-v4/wasm-miner/pkg/*.wasm   # kalau mau track source Rust aja, bukan build
+node_modules/
+.next/
