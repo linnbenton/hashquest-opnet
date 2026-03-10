@@ -1,0 +1,6 @@
+"scripts": {
+  "dev": "next dev --no-turbo",
+  "dev-webpack": "next dev --webpack",
+  "build": "next build --no-turbo",
+  "start": "next start"
+}

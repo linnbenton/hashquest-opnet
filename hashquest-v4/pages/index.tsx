@@ -1,4 +1,4 @@
-import Miner from "../components/Miner"
+import Miner from "../../components/Miner"
 import Dashboard from "../components/Dashboard"
 import Leaderboard from "../components/Leaderboard"
 
