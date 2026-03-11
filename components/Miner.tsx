@@ -42,7 +42,9 @@ export default function Miner() {
 
     try {
 
-      await init()
+      const wasm = await import("/miner.js")
+
+      await wasm.default("/miner_bg.wasm")
 
       console.log("miner loaded")
 
