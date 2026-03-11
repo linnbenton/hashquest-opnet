@@ -35,29 +35,41 @@ export default function Miner() {
 
 }
 
- const startMining = async () => {
+const startMining = async () => {
 
-  const wasm = await fetch("/miner.wasm")
+  try {
 
-  const bytes = await wasm.arrayBuffer()
+    const response = await fetch("/miner.wasm")
 
-  const module = await WebAssembly.instantiate(bytes,{})
+    if (!response.ok) {
+      throw new Error("WASM file not found")
+    }
 
-  const miner = module.instance.exports as any
+    const { instance } = await WebAssembly.instantiateStreaming(response, {})
 
-  console.log("miner loaded")
+    const miner = instance.exports as any
 
-  setInterval(()=>{
+    console.log("miner loaded")
 
-   const hash = miner.mine()
+    setInterval(()=>{
 
-   setHashrate(h=>h+1)
+      const hash = miner.mine()
 
-   submitHash(wallet!,hash)
+      setHashrate(h=>h+1)
 
-  },100)
+      if(wallet){
+        submitHash(wallet,hash)
+      }
 
- }
+    },100)
+
+  } catch(err) {
+
+    console.error("WASM load failed:",err)
+
+  }
+
+}
 
  return(
 
