@@ -19,10 +19,7 @@ export default function Miner() {
 
   try {
 
-    // request account dari wallet
-    const accounts = await opnet.request({
-      method: "requestAccounts"
-    })
+    const accounts = await opnet.connect()
 
     console.log("Wallet:", accounts)
 
