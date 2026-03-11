@@ -1,10 +1,15 @@
-export default function handler(req,res){
+import type { NextApiRequest, NextApiResponse } from "next"
+
+export default function handler(
+ req: NextApiRequest,
+ res: NextApiResponse
+){
 
  const data = [
 
-  {wallet:"0xA12",hash:450000},
-  {wallet:"0xB33",hash:390000},
-  {wallet:"0xC77",hash:250000}
+  { wallet: "0x123", hash: 1200 },
+  { wallet: "0xabc", hash: 980 },
+  { wallet: "0x999", hash: 750 }
 
  ]
 

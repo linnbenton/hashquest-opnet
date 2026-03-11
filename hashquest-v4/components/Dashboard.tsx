@@ -1,4 +1,9 @@
-export default function Dashboard({hashrate,reward}){
+interface DashboardProps {
+  hashrate: number
+  reward: number
+}
+
+export default function Dashboard({ hashrate, reward }: DashboardProps) {
 
  return(
 

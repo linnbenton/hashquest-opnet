@@ -1,31 +1,23 @@
-import {useEffect,useState} from "react"
+import { useState } from "react"
 
-export default function Leaderboard(){
+type Miner = {
+  wallet: string
+  hash: number
+}
 
- const [miners,setMiners] = useState([])
+export default function Leaderboard() {
 
- useEffect(()=>{
+  const [miners, setMiners] = useState<Miner[]>([])
 
-  fetch("/api/leaderboard")
-   .then(res=>res.json())
-   .then(setMiners)
+  return (
+    <div>
 
- },[])
+      <h2>Leaderboard</h2>
 
- return(
+      {miners.map((m, i) => (
+        <p key={i}>{m.wallet} - {m.hash}</p>
+      ))}
 
-  <div>
-
-   <h2>Leaderboard</h2>
-
-   {miners.map((m,i)=>(
-
-    <p key={i}>{m.wallet} - {m.hash}</p>
-
-   ))}
-
-  </div>
-
- )
-
+    </div>
+  )
 }

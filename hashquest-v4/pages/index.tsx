@@ -10,7 +10,7 @@ export default function Home(){
 
    <h1>HashQuest Mining</h1>
 
-   <Dashboard hashrate="1200" reward="0.25 OP"/>
+   <Dashboard hashrate={1200} reward={0.25}/>
 
    <Miner/>
 

@@ -1,53 +1,76 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
+import { submitHash } from "../hashquest-v4/contracts/miningContract"
 
 export default function Miner() {
 
-  const [status, setStatus] = useState("idle");
+ const [hashrate,setHashrate] = useState(0)
+ const [wallet,setWallet] = useState<string | null>(null)
 
-  const startMining = async () => {
+ const connectWallet = async () => {
 
-    try {
+  if(!(window as any).opnet){
+   alert("Install OPNet wallet")
+   return
+  }
 
-      setStatus("loading wasm");
+  const w = await (window as any).opnet.connect()
 
-      // load wasm file
-      const response = await fetch("/wasm-miner/miner_bg.wasm");
+  setWallet(w.address)
 
-      const bytes = await response.arrayBuffer();
+  console.log("Wallet:",w)
 
-      // initialize wasm
-      const wasm = await WebAssembly.instantiate(bytes, {});
+ }
 
-      console.log("WASM loaded:", wasm);
+ const startMining = async () => {
 
-      setStatus("mining");
+  const wasm = await fetch("/miner.wasm")
 
-    } catch (err) {
+  const bytes = await wasm.arrayBuffer()
 
-      console.error("Miner error:", err);
+  const module = await WebAssembly.instantiate(bytes,{})
 
-      setStatus("miner failed");
+  const miner = module.instance.exports as any
 
-    }
+  console.log("miner loaded")
 
-  };
+  setInterval(()=>{
 
-  return (
+   const hash = miner.mine()
 
-    <div style={{ textAlign: "center", padding: "20px" }}>
+   setHashrate(h=>h+1)
 
-      <h2>HashQuest Miner</h2>
+   submitHash(wallet!,hash)
 
-      <p>Status: {status}</p>
+  },100)
 
-      <button onClick={startMining}>
-        Start Mining
-      </button>
+ }
 
-    </div>
+ return(
 
-  );
+  <div>
+
+   <h1>HashQuest Miner</h1>
+
+   {!wallet && (
+    <button onClick={connectWallet}>
+     Connect Wallet
+    </button>
+   )}
+
+   {wallet && (
+    <p>Wallet: {wallet}</p>
+   )}
+
+   <button onClick={startMining}>
+    Start Mining
+   </button>
+
+   <p>Hashrate: {hashrate}</p>
+
+  </div>
+
+ )
 
 }
