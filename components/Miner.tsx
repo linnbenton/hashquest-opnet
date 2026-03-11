@@ -1,5 +1,6 @@
 "use client"
 
+import Script from "next/script"
 import { useState } from "react"
 import init, { mine } from "../public/miner.js"
 import { submitHash } from "../hashquest-v4/contracts/miningContract"
@@ -44,8 +45,7 @@ export default function Miner() {
 
       const wasm = await import("/miner.js")
 
-      // inisialisasi WASM dengan path file
-    await wasm.default("/miner_bg.wasm")
+      await wasm.default(new URL("/miner_bg.wasm", window.location.href))
 
       console.log("miner loaded")
 
@@ -70,7 +70,8 @@ export default function Miner() {
   }
 
   return (
-
+<>
+  <Script src="/miner.js" strategy="beforeInteractive" />
     <div>
 
       <h1>HashQuest Miner</h1>
