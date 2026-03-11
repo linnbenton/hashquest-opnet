@@ -10,18 +10,33 @@ export default function Miner() {
 
  const connectWallet = async () => {
 
-  if(!(window as any).opnet){
-   alert("Install OPNet wallet")
-   return
+  const opnet = (window as any).opnet
+
+  if (!opnet) {
+    alert("Install OPNet wallet")
+    return
   }
 
-  const w = await (window as any).opnet.connect()
+  try {
 
-  setWallet(w.address)
+    // request account dari wallet
+    const accounts = await opnet.request({
+      method: "requestAccounts"
+    })
 
-  console.log("Wallet:",w)
+    console.log("Wallet:", accounts)
 
- }
+    if (accounts && accounts.length > 0) {
+      setWallet(accounts[0])
+    }
+
+  } catch (err) {
+
+    console.error("Wallet connection failed:", err)
+
+  }
+
+}
 
  const startMining = async () => {
 
