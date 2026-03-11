@@ -41,33 +41,33 @@ export default function Miner() {
 
   const startMining = async () => {
 
-    try {
+  try {
 
-      const wasm = await import("/miner.js")
+    const wasm = await import("/miner.js")
 
-      await wasm.default(new URL("/miner_bg.wasm", window.location.href))
+    await wasm.default()
 
-      console.log("miner loaded")
+    console.log("miner loaded")
 
-      setInterval(() => {
+    setInterval(() => {
 
-        const hash = mine()
+      const hash = wasm.mine()
 
-        setHashrate(h => h + 1)
+      setHashrate(h => h + 1)
 
-        if(wallet){
-          submitHash(wallet, hash)
-        }
+      if(wallet){
+        submitHash(wallet, hash)
+      }
 
-      }, 100)
+    }, 100)
 
-    } catch (err) {
+  } catch(err) {
 
-      console.error("WASM load failed:", err)
-
-    }
+    console.error("WASM load failed:", err)
 
   }
+
+}
 
   return (
 <>
