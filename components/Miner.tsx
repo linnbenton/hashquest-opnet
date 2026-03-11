@@ -1,8 +1,6 @@
 "use client"
 
-import Script from "next/script"
 import { useState } from "react"
-import init, { mine } from "../public/miner.js"
 import { submitHash } from "../hashquest-v4/contracts/miningContract"
 
 export default function Miner() {
@@ -45,13 +43,13 @@ export default function Miner() {
 
     const wasm = await import("/miner.js")
 
-    await wasm.default()
+    await wasm.default(new URL("/miner_bg.wasm", window.location.origin))
 
     console.log("miner loaded")
 
     setInterval(() => {
 
-      const hash = wasm.mine()
+      const hash = wasm.mine(1n)
 
       setHashrate(h => h + 1)
 
@@ -70,8 +68,7 @@ export default function Miner() {
 }
 
   return (
-<>
-  <Script src="/miner.js" strategy="beforeInteractive" />
+
     <div>
 
       <h1>HashQuest Miner</h1>
