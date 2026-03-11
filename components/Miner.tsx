@@ -44,7 +44,8 @@ export default function Miner() {
 
       const wasm = await import("/miner.js")
 
-      await wasm.default("/miner_bg.wasm")
+      // inisialisasi WASM dengan path file
+    await wasm.default("/miner_bg.wasm")
 
       console.log("miner loaded")
 
