@@ -1,94 +1,76 @@
 "use client"
 
-import Script from "next/script"
-import { useState } from "react"
-import { submitHash } from "../hashquest-v4/contracts/miningContract"
+import { useState,useRef } from "react"
 
-export default function Miner() {
+export default function Miner(){
 
-  const [hashrate, setHashrate] = useState(0)
-  const [wallet, setWallet] = useState<string | null>(null)
+  const [status,setStatus] = useState("Ready")
+  const [hashrate,setHashrate] = useState(0)
 
-  const connectWallet = async () => {
+  const mining = useRef(false)
 
-    const opnet = (window as any).opnet
+  async function start(){
 
-    if (!opnet) {
-      alert("Install OPNet wallet")
-      return
-    }
+    if(mining.current) return
 
-    try {
+    mining.current = true
+    setStatus("Mining")
 
-      const accounts = await opnet.request({
-        method: "requestAccounts"
-      })
+    let hashes = 0
+    const start = Date.now()
 
-      console.log("Wallet:", accounts)
+    while(mining.current){
 
-      if (accounts && accounts.length > 0) {
-        setWallet(accounts[0])
+      hashes++
+
+      if(hashes % 10000 === 0){
+
+        const seconds = (Date.now()-start)/1000
+
+        setHashrate(Math.floor(hashes/seconds))
+
+        await new Promise(r=>setTimeout(r,0))
+
       }
-
-    } catch (err) {
-
-      console.error("Wallet connection failed:", err)
 
     }
 
   }
 
-  const startMining = async () => {
+  function stop(){
 
-  try {
-
-    const wasm = await window.__wbg_init("/miner_bg.wasm")
-
-    console.log("miner loaded")
-
-    setInterval(() => {
-
-      const hash = window.mine(1n)
-
-      setHashrate(h => h + 1)
-
-      if(wallet){
-        submitHash(wallet, hash)
-      }
-
-    }, 100)
-
-  } catch(err) {
-
-    console.error("WASM load failed:", err)
+    mining.current = false
+    setStatus("Stopped")
 
   }
 
-}
+  return(
 
-  return (
+    <div style={{marginTop:30}}>
 
-    <div>
+      <h2>CPU Miner</h2>
 
-      <Script src="/miner.js" strategy="beforeInteractive" />
+      <p>Status: {status}</p>
 
-      <h1>HashQuest Miner</h1>
+      <p>Hashrate: {hashrate} H/s</p>
 
-      {!wallet && (
-        <button onClick={connectWallet}>
-          Connect Wallet
-        </button>
-      )}
-
-      {wallet && (
-        <p>Wallet: {wallet}</p>
-      )}
-
-      <button onClick={startMining}>
+      <button
+        onClick={start}
+        style={{fontSize:18,padding:"10px 20px"}}
+      >
         Start Mining
       </button>
 
-      <p>Hashrate: {hashrate}</p>
+      <button
+        onClick={stop}
+        style={{
+          fontSize:18,
+          padding:"10px 20px",
+          marginLeft:10
+        }}
+      >
+        Stop
+      </button>
 
     </div>
 

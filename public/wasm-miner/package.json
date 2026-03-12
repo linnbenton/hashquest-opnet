@@ -1,6 +1,15 @@
-"scripts": {
-  "dev": "next dev --no-turbo",
-  "dev-webpack": "next dev --webpack",
-  "build": "next build --no-turbo",
-  "start": "next start"
+{
+  "name": "miner",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "miner_bg.wasm",
+    "miner.js",
+    "miner.d.ts"
+  ],
+  "main": "miner.js",
+  "types": "miner.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
 }

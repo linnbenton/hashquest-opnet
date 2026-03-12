@@ -1,60 +1,69 @@
 "use client"
 
 import { useState } from "react"
-import { checkBlockStructure } from "../lib/gameLogic"
 
 export default function PuzzleBoard(){
 
-const [board,setBoard] = useState([
-"TX","HASH","NONCE","MERKLE","TIME","TX"
-])
+  const [reward,setReward] = useState(0)
 
-function shuffle(){
-setBoard([...board].sort(()=>Math.random()-0.5))
-}
+  function mineTile(){
 
-function check(){
+    const r = Math.floor(Math.random()*10)
 
-if(checkBlockStructure(board)){
-alert("🎉 Block mined successfully!")
-}else{
-alert("❌ Invalid block structure")
-}
+    if(r > 7){
 
-}
+      setReward(reward+1)
 
-return(
+    }
 
-<div style={{textAlign:"center"}}>
+  }
 
-<div style={{
-display:"grid",
-gridTemplateColumns:"repeat(3,100px)",
-gap:"10px",
-justifyContent:"center",
-marginBottom:"20px"
-}}>
+  const tiles = new Array(9).fill(0)
 
-{board.map((tile,i)=>(
-<div key={i} style={{
-background:"#222",
-color:"#fff",
-padding:"20px",
-borderRadius:"8px"
-}}>
-{tile}
-</div>
-))}
+  return(
 
-</div>
+    <div style={{margin:30}}>
 
-<button onClick={shuffle}>Shuffle</button>
-<button onClick={check} style={{marginLeft:"10px"}}>
-Mine Block
-</button>
+      <h2>Puzzle Mining Grid</h2>
 
-</div>
+      <div style={{
+        display:"grid",
+        gridTemplateColumns:"repeat(3,80px)",
+        gap:10,
+        justifyContent:"center"
+      }}>
 
-)
+        {tiles.map((_,i)=>(
+
+          <div
+            key={i}
+            onClick={mineTile}
+            style={{
+              width:80,
+              height:80,
+              fontSize:32,
+              background:"#222",
+              display:"flex",
+              alignItems:"center",
+              justifyContent:"center",
+              color:"#0f0",
+              fontSize:24,
+              cursor:"pointer"
+            }}
+          >
+            #
+          </div>
+
+        ))}
+
+      </div>
+
+      <p style={{marginTop:10}}>
+        Puzzle Rewards: {reward}
+      </p>
+
+    </div>
+
+  )
 
 }
